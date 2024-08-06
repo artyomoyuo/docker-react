@@ -1,0 +1,26 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t benny/docker-react -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true benny/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-west-2" # needs to be changed  
+  app: "docker"
+  env: "Docker-env"
+  bucket_name: "elasticbeanstalk-us-west-2-sfeikd4dk499"
+  bucket_path: "docker"
+  on:
+    branch: master  
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: "$AWS_SECRET_KEY"
+
+
+# Policies are like RBAC
+
+
